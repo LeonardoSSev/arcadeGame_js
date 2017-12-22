@@ -8,8 +8,10 @@
 	<script>
 		var canvas;
 		var canvasContext;
-		var ballX = 50;
+		var ballX = 10;
 		var ballSpeedX = 5;
+		var ballY = 4;
+		var ballSpeedY = 5;
 
 
 		window.onload = function(){
@@ -25,6 +27,13 @@
 
 		function moveEverything(){
 			ballX += ballSpeedX;
+			ballY += ballSpeedY;
+			if(ballY > canvas.height){
+				ballSpeedY = -ballSpeedY;
+			}
+			if(ballY < 0){
+				ballSpeedY = -ballSpeedY;
+			}
 			if(ballX > canvas.width){
 				ballSpeedX = -ballSpeedX;
 			}
@@ -36,7 +45,16 @@
 		function drawEverything(){
 			drawRect(0, 0, canvas.width, canvas.height, "black");
 			drawRect(0, 200, 10, 130, "white");
-			drawRect(ballX, 200, 10, 10, "red");
+			drawCircle(ballX, ballY, 10, "white")
+
+			//drawRect(ballX, 200, 10, 10, "red");
+		}
+
+		function drawCircle(centerX, centerY, radius, colorCircle){
+			canvasContext.fillStyle = colorCircle;
+			canvasContext.beginPath();
+			canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+			canvasContext.fill();
 		}
 
 		function drawRect(leftX, topY, width, height, color){
