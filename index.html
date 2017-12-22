@@ -14,6 +14,7 @@
 		var ballSpeedY = 5;
 
 		var paddle1Y = 250;
+		var paddle2Y = 250;
 		const PADDLE_HEIGHT = 100;
 
 		function calculateMousePos(evt){
@@ -44,6 +45,11 @@
 			});
 		}		
 
+		function ballReset(){
+			ballSpeedX = -ballSpeedX;
+			ballX = canvas.width/2;
+			ballY = canvas.width/2;
+		}
 
 		function moveEverything(){
 			ballX += ballSpeedX;
@@ -58,16 +64,20 @@
 				ballSpeedX = -ballSpeedX;
 			}
 			if(ballX < 0){
-				ballSpeedX = -ballSpeedX;
+				if(ballY > paddle1Y &&
+					ballY < paddle1Y+PADDLE_HEIGHT){
+						ballSpeedX = -ballSpeedX;
+				}else{
+					ballReset();	
+				}
+				
 			}
 		}
 
 		function drawEverything(){
 			drawRect(0, 0, canvas.width, canvas.height, "black");
 			drawRect(0, paddle1Y, 10, 100, "white");
-			drawCircle(ballX, ballY, 10, "white")
-
-			//drawRect(ballX, 200, 10, 10, "red");
+			drawCircle(ballX, ballY, 10, "white")			
 		}
 
 		function drawCircle(centerX, centerY, radius, colorCircle){
