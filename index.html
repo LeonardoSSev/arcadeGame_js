@@ -9,6 +9,8 @@
 		var canvas;
 		var canvasContext;
 		var ballX = 50;
+		var ballSpeedX = 5;
+
 
 		window.onload = function(){
 			console.log("Hello World");
@@ -18,23 +20,28 @@
 			setInterval(function(){
 						moveEverything();
 						drawEverything();
-			}, 100, framesPerSecond);
+			}, 20, framesPerSecond);
 }		
 
-
 		function moveEverything(){
-			ballX += 5;
+			ballX += ballSpeedX;
+			if(ballX > canvas.width){
+				ballSpeedX = -ballSpeedX;
+			}
+			if(ballX < 0){
+				ballSpeedX = -ballSpeedX;
+			}
 		}
 
 		function drawEverything(){
-			canvasContext.fillStyle = "black";
-			canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+			drawRect(0, 0, canvas.width, canvas.height, "black");
+			drawRect(0, 200, 10, 130, "white");
+			drawRect(ballX, 200, 10, 10, "red");
+		}
 
-			canvasContext.fillStyle = "white";
-			canvasContext.fillRect(0, 200, 10, 130);
-
-			canvasContext.fillStyle = "red";
-			canvasContext.fillRect(ballX, 200, 10, 10);
+		function drawRect(leftX, topY, width, height, color){
+			canvasContext.fillStyle = color;
+			canvasContext.fillRect(leftX, topY, width, height);			
 		}
 	</script>
 </body>
