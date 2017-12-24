@@ -1,12 +1,17 @@
-var canvas;
+
+		var canvas;
 		var canvasContext;
 		var ballX = 10;
-		var ballSpeedX = 5;
+		var ballSpeedX = 10;
 		var ballY = 4;
 		var ballSpeedY = 5;
 
 		var paddle1Y = 250;
 		var paddle2Y = 250;
+
+		var score1 = 0;
+		var score2 = 0;
+
 		const PADDLE_THICKNESS = 10;
 		const PADDLE_HEIGHT = 100;
 
@@ -34,7 +39,7 @@ var canvas;
 
 			canvas.addEventListener('mousemove', function(evt){
 				var mousePos = calculateMousePos(evt);
-				paddle2Y = mousePos.y-(PADDLE_HEIGHT/2);
+				paddle1Y = mousePos.y-(PADDLE_HEIGHT/2);
 			});
 		}		
 
@@ -44,7 +49,17 @@ var canvas;
 			ballY = canvas.width/2;
 		}
 
+		function computerMovement(){
+			var paddle2YCenter = paddle2Y + (PADDLE_HEIGHT/2);
+			if(paddle2YCenter < ballY-35){
+				paddle2Y+=6;
+			} else if(paddle2YCenter > ballY+35){
+				paddle2Y-=6;
+			}
+		}
+
 		function moveEverything(){
+			computerMovement();
 			ballX += ballSpeedX;
 			ballY += ballSpeedY;
 			if(ballY > canvas.height){
@@ -58,7 +73,8 @@ var canvas;
 					ballY < paddle2Y+PADDLE_HEIGHT){
 						ballSpeedX = -ballSpeedX;
 				}else{
-					ballReset();	
+					ballReset();
+					score1++;
 				}
 			}
 			if(ballX < 0){
@@ -66,7 +82,8 @@ var canvas;
 					ballY < paddle1Y+PADDLE_HEIGHT){
 						ballSpeedX = -ballSpeedX;
 				}else{
-					ballReset();	
+					ballReset();
+					score2++;
 				}
 				
 			}
@@ -76,7 +93,10 @@ var canvas;
 			drawRect(0, 0, canvas.width, canvas.height, "black");
 			drawRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "white");
 			drawRect(canvas.width-PADDLE_THICKNESS, paddle2Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "white");
-			drawCircle(ballX, ballY, 10, "white")			
+			drawCircle(ballX, ballY, 10, "white");
+			canvasContext.fillStyle = "white";
+			canvasContext.fillText(score1, 30, 550);
+			canvasContext.fillText(score2, canvas.width-30, canvas.height-50);
 		}
 
 		function drawCircle(centerX, centerY, radius, colorCircle){
