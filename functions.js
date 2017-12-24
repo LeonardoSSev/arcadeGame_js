@@ -30,6 +30,14 @@
 			}
 		}
 
+		function handleMouseClick(evt){
+			if(winningScreen){
+				score1 = 0;
+				score2 = 0;
+				winningScreen = false;
+			}
+		}
+
 		window.onload = function(){
 			console.log("Hello World");
 			canvas = document.getElementById("gameCanvas");
@@ -40,6 +48,8 @@
 						drawEverything();
 			}, 20, framesPerSecond);
 
+			canvas.addEventListener('mousedown', handleMouseClick);
+
 			canvas.addEventListener('mousemove', function(evt){
 				var mousePos = calculateMousePos(evt);
 				paddle1Y = mousePos.y-(PADDLE_HEIGHT/2);
@@ -49,8 +59,6 @@
 		function ballReset(){
 			if(score1 >= WINNING_SCORE || score2 >= WINNING_SCORE){
 				winningScreen = true;
-				score1 = 0;
-				score2 = 0;
 			}
 			ballSpeedX = -ballSpeedX;
 			ballX = canvas.width/2;
@@ -106,17 +114,33 @@
 			
 		}
 
+		function drawNet(){
+			for(var i = 0; i<=canvas.height; i+=40){
+				drawRect(canvas.width/2, i, 2, 30, "white");
+			}
+		}
+
 		function drawEverything(){
 			drawRect(0, 0, canvas.width, canvas.height, "black");
 			if(winningScreen){
+					canvasContext.fillStyle = "white";
+					canvasContext.font = "30px Arial";
+				if(score1 >= WINNING_SCORE){
+					canvasContext.fillText("Left player won!", (canvas.width/2)-100, 100);
+				} else if(score2 >= WINNING_SCORE){
+					canvasContext.fillText("Right player won!", (canvas.width/2)-100, 100);
+				}
 				canvasContext.fillStyle = "white";
-				canvasContext.font = "30px Arial";
-				canvasContext.fillText("Click to continue", canvas.width/2, canvas.height/2);		
-			}else{
+				canvasContext.font = "20px Arial";
+				canvasContext.fillText("Click to continue", (canvas.width/2)-100, canvas.height-100);
+			} else {
+				drawNet();
 				drawRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "white");
 				drawRect(canvas.width-PADDLE_THICKNESS, paddle2Y, PADDLE_THICKNESS, PADDLE_HEIGHT, "white");
 				drawCircle(ballX, ballY, 10, "white");
+				
 				canvasContext.fillStyle = "white";
+				canvasContext.font = "15px Arial";
 				canvasContext.fillText(score1, 30, 550);
 				canvasContext.fillText(score2, canvas.width-30, canvas.height-50);
 			}
